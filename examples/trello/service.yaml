@@ -1,0 +1,50 @@
+# =============================================================================
+# Configuración de Trello MCP
+# =============================================================================
+#
+# Este es un ejemplo completo de configuración para Trello.
+# Copia este archivo a config/service.yaml para usarlo.
+#
+
+service:
+  name: "trello"
+  display_name: "Trello"
+  version: "1.0.0"
+  description: "MCP Server for Trello API - Manage boards, lists, and cards"
+
+api:
+  base_url: "https://api.trello.com/1"
+  openapi_spec_url: "https://developer.atlassian.com/cloud/trello/swagger.v3.json"
+  tool_prefix: "trello"
+  timeout: 30
+
+auth:
+  gateway_endpoint: "/credentials/trello"
+  credentials_format:
+    - name: "api_key"
+      query_param: "key"
+    - name: "token"
+      query_param: "token"
+
+validation:
+  # IDs de Trello: 24 caracteres hexadecimales
+  id_pattern: "^[a-fA-F0-9]{24}$"
+  id_description: "24 character hex string (e.g., 507f1f77bcf86cd799439011)"
+  max_name_length: 16384
+  max_description_length: 16384
+
+policies:
+  blocked_patterns:
+    - "delete_boards_id$"
+    - "delete_organizations_id$"
+    - "delete_boards_id_members"
+    - "delete_organizations_id_members"
+  require_confirmation:
+    - "put_boards_id_closed"
+    - "put_lists_id_closed"
+  audit_all: false
+
+defaults:
+  # Puedes configurar valores por defecto aquí
+  # default_board_id: "your_board_id"
+  # default_workspace_id: "your_workspace_id"

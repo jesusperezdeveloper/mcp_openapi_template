@@ -1,0 +1,2 @@
+# OpenAPI specs are downloaded here
+# Use: python -m scripts.fetch_openapi --output openapi/spec.json

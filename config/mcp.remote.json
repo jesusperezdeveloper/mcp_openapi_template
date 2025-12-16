@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "myservice": {
+      "url": "https://your-domain.com/sse",
+      "_comment": "Replace 'your-domain.com' with your deployed server"
+    }
+  }
+}

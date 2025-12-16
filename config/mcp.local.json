@@ -1,0 +1,13 @@
+{
+  "command": "python",
+  "args": [
+    "-m",
+    "src.server"
+  ],
+  "env": {
+    "PYTHONPATH": "vendor",
+    "AUTH_GATEWAY_URL": "${AUTH_GATEWAY_URL}",
+    "AUTH_GATEWAY_API_KEY": "${AUTH_GATEWAY_API_KEY}"
+  },
+  "cwd": "."
+}

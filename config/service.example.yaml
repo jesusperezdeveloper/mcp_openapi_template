@@ -1,0 +1,113 @@
+# =============================================================================
+# Configuración del Servicio MCP
+# =============================================================================
+#
+# Este archivo define la configuración específica de tu servicio MCP.
+# Copia este archivo a service.yaml y personaliza los valores.
+#
+# Uso:
+#   cp config/service.example.yaml config/service.yaml
+#   # Edita service.yaml con tus valores
+#
+
+# -----------------------------------------------------------------------------
+# Información del Servicio
+# -----------------------------------------------------------------------------
+service:
+  # Nombre interno del servicio (usado en logs, prefijos de tools, etc.)
+  # Debe ser lowercase, sin espacios
+  name: "myservice"
+
+  # Nombre para mostrar en la UI
+  display_name: "My Service"
+
+  # Versión del MCP
+  version: "1.0.0"
+
+  # Descripción breve
+  description: "MCP Server for My Service API"
+
+# -----------------------------------------------------------------------------
+# Configuración de la API
+# -----------------------------------------------------------------------------
+api:
+  # URL base de la API
+  base_url: "https://api.example.com/v1"
+
+  # URL para descargar la especificación OpenAPI
+  # Deja vacío si no hay spec disponible o si la proporcionas manualmente
+  openapi_spec_url: "https://api.example.com/openapi.json"
+
+  # Prefijo para las tools generadas desde OpenAPI
+  # Las tools se nombrarán como: {tool_prefix}_{operationId}
+  tool_prefix: "myservice"
+
+  # Timeout para requests HTTP (en segundos)
+  timeout: 30
+
+# -----------------------------------------------------------------------------
+# Configuración de Autenticación (Auth Gateway)
+# -----------------------------------------------------------------------------
+auth:
+  # Endpoint del Auth Gateway para obtener credenciales
+  # El MCP llamará a: {AUTH_GATEWAY_URL}{gateway_endpoint}
+  gateway_endpoint: "/credentials/myservice"
+
+  # Formato de las credenciales que devuelve el Auth Gateway
+  # Define cómo mapear las credenciales a parámetros de la API
+  credentials_format:
+    # Cada entrada define:
+    # - name: nombre del campo en la respuesta del Gateway
+    # - query_param: nombre del query param para la API (opcional)
+    # - header: nombre del header para la API (opcional)
+    - name: "api_key"
+      query_param: "key"
+    - name: "token"
+      query_param: "token"
+
+  # Alternativa: autenticación via header
+  # credentials_format:
+  #   - name: "access_token"
+  #     header: "Authorization"
+  #     prefix: "Bearer "
+
+# -----------------------------------------------------------------------------
+# Configuración de Validación
+# -----------------------------------------------------------------------------
+validation:
+  # Patrón regex para validar IDs del servicio
+  # Ejemplo para Trello: IDs de 24 caracteres hexadecimales
+  id_pattern: "^[a-zA-Z0-9_-]+$"
+  id_description: "alphanumeric string with underscores and hyphens"
+
+  # Longitudes máximas para campos comunes
+  max_name_length: 16384
+  max_description_length: 16384
+
+# -----------------------------------------------------------------------------
+# Políticas de Herramientas
+# -----------------------------------------------------------------------------
+policies:
+  # Patrones de tools a bloquear (regex)
+  # Estas tools no se registrarán
+  blocked_patterns:
+    - "delete_organization"
+    - "delete_workspace"
+
+  # Patrones de tools que requieren confirmación explícita
+  # El usuario debe pasar confirm=true
+  require_confirmation:
+    - "delete_.*"
+    - ".*_closed"
+
+  # Habilitar logging de auditoría para todas las operaciones
+  audit_all: false
+
+# -----------------------------------------------------------------------------
+# Defaults Opcionales
+# -----------------------------------------------------------------------------
+defaults:
+  # IDs por defecto para operaciones comunes
+  # Estos valores se usarán si no se especifican en las llamadas
+  # default_board_id: ""
+  # default_workspace_id: ""
